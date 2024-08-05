@@ -9,9 +9,18 @@
   <body>
     <div id="app">
       <h1>File Sync Service</h1>
-      <div id="file-list"></div>
+      <div
+        style="border: 1px solid #fff; margin-top: 5px"
+        v-for="item in fileList"
+      >
+        <span> {{item.fileUrl}} </span>
+        <img :src="item.src" alt="" />
+        <button @click="showQrCode(item)">生成二维码</button>
+      </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
+    <script src="/axios.js"></script>
+    <script src="vue.js"></script>
+    <script type="module" src="./script.js"></script>
   </body>
 </html>
