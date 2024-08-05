@@ -44,17 +44,21 @@ const watcher = chokidar.watch(syncDir, {
 });
 
 watcher
-  .on('add', path => io.emit('file-added', path))
+  .on('add', __path => {
+    io.emit('file-added', `http://${ipv4Address}:${PORT}/${path.basename(__path)}`)
+  })
   .on('change', path => io.emit('file-changed', path))
   .on('unlink', path => io.emit('file-deleted', path));
 
+const PORT = process.env.PORT || 3000;
 io.on('connection', (socket) => {
   console.log('A user connected');
 
   // 发送当前文件列表
   fs.readdir(syncDir, (err, files) => {
     if (err) throw err;
-    socket.emit('file-list', files);
+    console.log({ files });
+    socket.emit('file-list', files.map(fileName => `http://${ipv4Address}:${PORT}/${fileName}`));
   });
 
   socket.on('disconnect', () => {
@@ -62,7 +66,6 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
 
 
 server.listen(PORT, () => console.log(`Server running on port http://${ipv4Address}:${PORT}`));
