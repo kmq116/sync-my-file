@@ -15,6 +15,9 @@ jobs:
       - name: Install pkg globally
         run: npm install -g pkg
 
+      - name: Install pnpm globally
+        run: npm install -g pnpm
+
       - name: Install dependencies
         run: pnpm install
 
