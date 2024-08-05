@@ -4,8 +4,7 @@ const socketIo = require('socket.io');
 const chokidar = require('chokidar');
 const path = require('path');
 const fs = require('fs');
-const axios = require('axios')
-console.log(axios);
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
