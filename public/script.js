@@ -54,11 +54,45 @@ createApp({
             })
         }
 
-        const message = ref('Hello vue!')
+
+        function download(item) {
+            console.log(item)
+            const url = item.fileUrl
+            // 解析文件路径
+            function parseFilePath(url) {
+                var parser = document.createElement('a');
+                parser.href = url;
+                return parser.pathname;
+            }
+
+            // 获取文件名
+            function getFileNameFromPath(filePath) {
+                var pathArray = filePath.split('/');
+                var fileName = pathArray.pop();
+                return fileName;
+            }
+
+            // 获取文件类型
+            function getFileType(fileName) {
+                var fileExtension = fileName.split('.').pop();
+                return fileExtension;
+            }
+
+            const filePath = parseFilePath(url);
+            const fileName = getFileNameFromPath(filePath);
+            const fileType = getFileType(fileName);
+            console.log({filePath, fileName, fileType})
+            // https://minio.tiananborui.com/dw-cloud/20240106/4deb2d6ff88140e6a745516f3e7d60e1.pdf
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.click();
+        }
+
         return {
-            message,
             fileList,
-            showQrCode
+            showQrCode,
+            download
         }
     }
 }).mount('#app')
