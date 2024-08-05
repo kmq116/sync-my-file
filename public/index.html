@@ -14,8 +14,10 @@
         v-for="item in fileList"
       >
         <span> {{item.fileUrl}} </span>
-        <img :src="item.src" alt="" />
-        <button @click="showQrCode(item)">生成二维码</button>
+        <img v-if="item.showQrCode" :src="item.src" alt="" />
+        <button @click="showQrCode(item)">
+          {{item.showQrCode ?'关闭':'生成' }} 二维码
+        </button>
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>

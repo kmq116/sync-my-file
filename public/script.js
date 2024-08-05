@@ -55,6 +55,7 @@ createApp({
     const fileList = ref([])
     function showQrCode(item) {
       axios.get('create-qrcode?text=' + item.fileUrl).then(res => {
+        item.showQrCode = !item.showQrCode
         console.log(res.data.data);
         item.src = res.data.data.base64
       })
