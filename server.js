@@ -27,7 +27,7 @@ function getIPv4Address() {
 const ipv4Address = getIPv4Address();
 console.log('IPv4 地址:', ipv4Address);
 
-const syncDir = path.join(__dirname, 'sync');
+const syncDir = path.join(process.cwd(), 'sync');
 
 app.use(express.static('public'));
 app.use(express.static('sync'));

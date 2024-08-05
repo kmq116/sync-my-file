@@ -7,6 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:win": "pkg --target win --no-fetch server.js"
   },
+  "pkg": {
+    "assets": [
+      "public/**/*",
+      "sync/**"
+    ],
+    "targets": [
+      "node14-win-x64"
+    ],
+    "outputPath": "dist"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
