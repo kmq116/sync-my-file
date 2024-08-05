@@ -10,12 +10,12 @@
     <div id="app">
       <h1>File Sync Service</h1>
       <div
-        style="border: 1px solid #fff; margin-top: 5px"
+        style="border: 1px solid #fff; padding: 5px"
         v-for="item in fileList"
       >
         <span> {{item.fileUrl}} </span>
         <img v-if="item.showQrCode" :src="item.src" alt="" />
-        <button @click="showQrCode(item)">
+        <button style="margin-left: 10px" @click="showQrCode(item)">
           {{item.showQrCode ?'关闭':'生成' }} 二维码
         </button>
       </div>
