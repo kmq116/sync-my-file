@@ -1,15 +1,18 @@
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const chokidar = require('chokidar');
-const path = require('path');
-const fs = require('fs');
+import getPort from 'get-port';
+
+import express from 'express';
+import http from 'http';
+import {Server as SocketIo} from 'socket.io'; // socket.io 的导入方式
+
+import chokidar from 'chokidar';
+import path from 'path';
+import fs from 'fs';
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-const QRCode = require('qrcode')
-const os = require('os');
+const io = new SocketIo(server);
+import QRCode from 'qrcode';
+import os from 'os';
 
 
 function getIPv4Address() {
@@ -84,8 +87,10 @@ app.get('/create-qrcode', async (req, res) => {
     }
 })
 
+const __port = await getPort();
+console.log({__port})
 
-const PORT = process.env.PORT || 8899;
+const PORT = process.env.PORT || __port;
 io.on('connection', (socket) => {
     console.log('A user connected');
 
