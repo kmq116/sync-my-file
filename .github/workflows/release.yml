@@ -28,6 +28,9 @@ jobs:
         run: |
           zip -r release.zip server.exe public
 
+      - name: List files
+        run: ls -al  # 列出当前目录的文件，确认 ZIP 文件存在
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -41,15 +44,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload release Asset
+      - name: Upload
         uses: softprops/action-gh-release@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release.zip
-          asset_name: release.zip
-          asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: ./release.zip
 
 
 
