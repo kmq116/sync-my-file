@@ -15,8 +15,8 @@ const os = require('os');
 function getIPv4Address() {
     const interfaces = os.networkInterfaces();
     for (const interfaceName in interfaces) {
-        const interface = interfaces[interfaceName];
-        for (const network of interface) {
+        const _interface = interfaces[interfaceName];
+        for (const network of _interface) {
             if (network.family === 'IPv4' && !network.internal) {
                 return network.address;
             }
@@ -45,7 +45,7 @@ const watcher = chokidar.watch(syncDir, {
 });
 
 const genFilePath = (fPath) => {
-    return   {fileUrl: `http://${ipv4Address}:${PORT}/${path.basename(fPath)}`}
+    return {fileUrl: `http://${ipv4Address}:${PORT}/${path.basename(fPath)}`}
 }
 watcher
     .on('add', __path => {
@@ -101,7 +101,13 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(PORT, () => console.log(`Server running on port http://${ipv4Address}:${PORT}`));
+server.listen(PORT, () => {
+    console.log(`Server running on port http://${ipv4Address}:${PORT}`)
+    import('open').then(module => {
+        const open = module.default
+        open(`http://${ipv4Address}:${PORT}`)
+    })
+});
 
 
 
