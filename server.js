@@ -87,7 +87,7 @@ app.get('/create-qrcode', async (req, res) => {
     }
 })
 
-const __port = await getPort();
+const __port = await getPort({port: 8899});
 console.log({__port})
 
 const PORT = process.env.PORT || __port;
