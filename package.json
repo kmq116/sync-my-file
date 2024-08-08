@@ -7,7 +7,6 @@
     "build:win": "pkg --target win --no-fetch server.js",
     "dev": "nodemon server.js"
   },
-  "type": "module",
   "pkg": {
     "assets": [
       "public/**/*",
@@ -29,6 +28,10 @@
     "nodemon": "^3.1.4",
     "open": "^9.1.0",
     "qrcode": "^1.5.3",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "tsup": "^8.2.4"
   }
 }
