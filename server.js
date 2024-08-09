@@ -10,7 +10,8 @@ const server = http.createServer(app);
 const io = socketIo(server);
 const QRCode = require('qrcode')
 const os = require('os');
-
+const portfinder = require('portfinder');
+const open = require('open');
 
 (async () => {
 
@@ -36,19 +37,19 @@ const os = require('os');
     app.use(express.static('public'));
     app.use(express.static('sync'));
 
-// 确保同步目录存在
+    // 确保同步目录存在
     if (!fs.existsSync(syncDir)) {
         fs.mkdirSync(syncDir);
     }
 
-// 设置文件监视器
+    // 设置文件监视器
     const watcher = chokidar.watch(syncDir, {
         ignored: /(^|[\/\\])\../, // 忽略点文件
         persistent: true
     });
 
     const genFilePath = (fPath) => {
-        return {fileUrl: `http://${ipv4Address}:${PORT}/${path.basename(fPath)}`}
+        return { fileUrl: `http://${ipv4Address}:${PORT}/${path.basename(fPath)}` }
     }
     watcher
         .on('add', __path => {
@@ -69,7 +70,7 @@ const os = require('os');
         }
 
         try {
-            const qrCodeBase64 = await QRCode.toDataURL(text, {width: 220, margin: 1})
+            const qrCodeBase64 = await QRCode.toDataURL(text, { width: 220, margin: 1 })
             return res.send({
                 code: 200,
                 data: {
@@ -86,9 +87,11 @@ const os = require('os');
             })
         }
     })
-    const {default: getPort} = await import('get-port')
-    const __port = await getPort({port: 8899});
-    console.log({__port})
+    portfinder.setBasePort(8899);    // default: 8000
+
+    // const {default: getPort} = await import('get-port')
+    const __port = await portfinder.getPortPromise();
+    console.log({ __port })
 
     const PORT = process.env.PORT || __port;
     io.on('connection', (socket) => {
@@ -97,8 +100,8 @@ const os = require('os');
         // 发送当前文件列表
         fs.readdir(syncDir, (err, files) => {
             if (err) throw err;
-            console.log({files});
-            socket.emit('file-list', files.map(fileName => ({fileUrl: `http://${ipv4Address}:${PORT}/${fileName}`})));
+            console.log({ files });
+            socket.emit('file-list', files.map(fileName => ({ fileUrl: `http://${ipv4Address}:${PORT}/${fileName}` })));
         });
 
         socket.on('disconnect', () => {
@@ -107,11 +110,10 @@ const os = require('os');
     });
 
     server.listen(PORT, () => {
-        console.log(`Server running on port http://${ipv4Address}:${PORT}`)
-        import('open').then(module => {
-            const open = module.default
-            open(`http://${ipv4Address}:${PORT}`)
-        })
+        const url = `http://${ipv4Address}:${PORT}`
+        console.log(`Server running on ${url}`)
+        console.log({ url });
+        open(url)
     });
 
 })()
