@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const chokidar = require('chokidar');
 const path = require('path');
 const fs = require('fs');
+const fileUploadRouter = require('./fileUpload');
 
 const app = express();
 const server = http.createServer(app);
@@ -36,6 +37,8 @@ const open = require('open');
 
     app.use(express.static('public'));
     app.use(express.static('sync'));
+    app.use('/api', fileUploadRouter);
+    app.use(fileUploadRouter)
 
     // 确保同步目录存在
     if (!fs.existsSync(syncDir)) {
